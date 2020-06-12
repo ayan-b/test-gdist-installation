@@ -1,0 +1,23 @@
+notifications:
+  email: false
+
+install:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then pip install -r requirements.txt; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then pip install --user -r requirements.txt; fi
+script:
+  - pip install pytest~=3.6.1
+  - pytest
+
+jobs:
+  include:
+    - name: "Python 3.8 on Xenial Linux"
+      language: python
+      python: 3.8
+    - name: "Python 3.8.0 on Windows"
+      os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.8.0
+        - python -m pip install --upgrade pip
+        - pip install --user wheel
+      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
